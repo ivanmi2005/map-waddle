@@ -1,9 +1,18 @@
 const STORAGE_KEY = "saved-places-v2";
 
-const avatarPlaceholder = svgPlaceholder("C", "#d8b19f", "#6d4638", true);
-const photoPlaceholder = emptyPhotoPlaceholder();
-
 const seedPlaces = [];
+const avatarPlaceholder = createSvgDataUrl(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#d8b19f"/>
+    <circle cx="50" cy="39" r="17" fill="#6d4638" opacity=".7"/>
+    <path d="M18 100c3-27 19-40 32-40s29 13 32 40" fill="#6d4638" opacity=".7"/>
+  </svg>
+`);
+const photoPlaceholder = createSvgDataUrl(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#ded2c7"/>
+  </svg>
+`);
 
 const state = { places: loadPlaces(), filter: "all", search: "", avatar: "", referenceImage: "" };
 const $ = (selector) => document.querySelector(selector);
@@ -11,15 +20,8 @@ const list = $("#places-list");
 const sheetLayer = $("#sheet-layer");
 const form = $("#place-form");
 
-function svgPlaceholder(text, background, foreground, avatar) {
-  const art = avatar
-    ? `<circle cx="50" cy="39" r="17" fill="${foreground}" opacity=".7"/><path d="M18 100c3-27 19-40 32-40s29 13 32 40" fill="${foreground}" opacity=".7"/>`
-    : `<path d="M0 75 31 39l18 21 15-14 36 42v12H0z" fill="${foreground}" opacity=".6"/><circle cx="72" cy="25" r="9" fill="${foreground}" opacity=".55"/><text x="50" y="94" text-anchor="middle" font-size="9" font-family="sans-serif" fill="white">${text}</text>`;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${background}"/>${art}</svg>`)}`;
-}
-
-function emptyPhotoPlaceholder() {
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ded2c7"/></svg>')}`;
+function createSvgDataUrl(svg) {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.trim())}`;
 }
 
 function loadPlaces() {
@@ -35,9 +37,13 @@ function savePlaces() {
 }
 
 function escapeHtml(value = "") {
-  const node = document.createElement("div");
-  node.textContent = value;
-  return node.innerHTML;
+  return String(value).replace(/[&<>'"]/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "'": "&#39;",
+    '"': "&quot;",
+  })[character]);
 }
 
 function render() {
