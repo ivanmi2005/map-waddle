@@ -2,8 +2,10 @@
 
 Mini app web, mobile-first y sin frameworks, para guardar los lugares que
 quieres visitar. Los datos y las imágenes subidas se conservan localmente en
-el navegador mediante `localStorage`. La lista comienza vacía para que cada
-persona añada únicamente sus propios lugares.
+el navegador mediante `localStorage`.
+
+La lista comienza vacía para que cada persona añada únicamente sus propios
+lugares.
 
 ## Desarrollo
 
