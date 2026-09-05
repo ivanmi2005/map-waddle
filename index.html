@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3eee7" />
+    <meta name="description" content="Checklist personal de lugares guardados" />
+    <title>Lugares guardados</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="toolbar" aria-label="Controles de la lista">
+        <div class="stats" aria-live="polite">
+          <strong id="total-count">0 lugares</strong>
+          <span id="visited-count">0 visitados</span>
+        </div>
+        <button class="icon-button primary" id="add-button" type="button" aria-label="Añadir lugar" title="Añadir lugar">
+          <span aria-hidden="true">+</span>
+        </button>
+      </header>
+
+      <section class="controls" aria-label="Buscar y filtrar lugares">
+        <label class="search-box">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+          <span class="sr-only">Buscar por nombre</span>
+          <input id="search-input" type="search" placeholder="Buscar un lugar…" autocomplete="off" />
+        </label>
+        <div class="filter-row">
+          <div class="filters" role="group" aria-label="Filtrar lugares">
+            <button class="filter active" type="button" data-filter="all" aria-pressed="true">Todos</button>
+            <button class="filter" type="button" data-filter="pending" aria-pressed="false">Pendientes</button>
+            <button class="filter" type="button" data-filter="visited" aria-pressed="false">Visitados</button>
+          </div>
+          <button class="more-button" id="data-menu-button" type="button" aria-label="Importar o exportar datos" aria-expanded="false">•••</button>
+          <div class="data-menu" id="data-menu" hidden>
+            <button id="export-button" type="button">Exportar JSON</button>
+            <button id="import-button" type="button">Importar JSON</button>
+          </div>
+          <input id="import-input" type="file" accept="application/json,.json" hidden />
+        </div>
+      </section>
+
+      <section class="places-list" id="places-list" aria-label="Lugares guardados"></section>
+      <div class="empty-state" id="empty-state" hidden>
+        <div class="empty-mark" aria-hidden="true">⌖</div>
+        <p>No hay lugares que mostrar.</p>
+        <button type="button" id="empty-add-button">Añadir un lugar</button>
+      </div>
+    </main>
+
+    <div class="sheet-layer" id="sheet-layer" hidden>
+      <button class="sheet-backdrop" id="sheet-backdrop" type="button" aria-label="Cerrar formulario"></button>
+      <section class="sheet" id="place-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <header class="sheet-header">
+          <div>
+            <p class="eyebrow">Lugar guardado</p>
+            <h2 id="sheet-title">Añadir lugar</h2>
+          </div>
+          <button class="close-button" id="close-sheet" type="button" aria-label="Cerrar">×</button>
+        </header>
+
+        <form id="place-form">
+          <input id="place-id" type="hidden" />
+          <div class="field full">
+            <label for="place-name">Nombre del lugar</label>
+            <input id="place-name" name="name" type="text" required maxlength="80" placeholder="Ej. Fondazione Prada" />
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="place-city">Ciudad</label>
+              <input id="place-city" name="city" type="text" required maxlength="60" placeholder="Milano" />
+            </div>
+            <div class="field">
+              <label for="place-country">País</label>
+              <input id="place-country" name="country" type="text" required maxlength="60" placeholder="Italia" />
+            </div>
+          </div>
+          <label class="visited-field">
+            <input id="place-visited" name="visited" type="checkbox" />
+            <span aria-hidden="true"></span>
+            Ya he visitado este lugar
+          </label>
+
+          <details class="reference-fields" id="reference-fields">
+            <summary>
+              <span><b>Lo he visto en…</b><small>Añade una referencia opcional</small></span>
+              <span class="summary-plus" aria-hidden="true">+</span>
+            </summary>
+            <div class="reference-content">
+              <div class="field full">
+                <label for="person-name">Nombre de la persona</label>
+                <input id="person-name" name="person" type="text" maxlength="60" placeholder="Ej. Claudia" />
+              </div>
+              <div class="upload-grid">
+                <label class="upload-field">
+                  <span class="upload-preview avatar-preview" id="avatar-preview">+</span>
+                  <span><b>Foto de perfil</b><small>JPG, PNG o WEBP</small></span>
+                  <input id="avatar-input" type="file" accept="image/*" />
+                </label>
+                <label class="upload-field">
+                  <span class="upload-preview reference-preview" id="reference-preview">+</span>
+                  <span><b>Foto de referencia</b><small>JPG, PNG o WEBP</small></span>
+                  <input id="reference-input" type="file" accept="image/*" />
+                </label>
+              </div>
+            </div>
+          </details>
+
+          <div class="form-actions">
+            <button class="delete-button" id="delete-button" type="button" hidden>Eliminar</button>
+            <button class="save-button" type="submit">Guardar lugar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
