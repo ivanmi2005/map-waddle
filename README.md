@@ -1,35 +1,39 @@
-# 🐧 Waddle — Mapa de sitios y referencias de viaje
+# Checklist personal de lugares
 
-App personal para guardar sitios en un mapa con sus referencias e inspiración
-(cuentas, enlaces de vídeos, imágenes pegadas del portapapeles), pensada para
-consultarla en el móvil mientras viajas.
-
-## Funciones
-
-- **Mapa** (MapLibre GL, estilo mapcn): busca sitios por nombre (Nominatim),
-  toca el mapa para marcar un punto, o pega coordenadas / enlaces de Google
-  Maps en el buscador.
-- **Sitios**: nombre, descripción, colección y referencias asociadas
-  (p. ej. `@ishowspeed` + enlace del vídeo). Botón para abrirlo en Google Maps.
-- **Referencias**: galería de imágenes/enlaces, sueltas o unidas a un sitio,
-  con colecciones para filtrar. Las imágenes se pegan directamente del
-  portapapeles (Gboard) o se suben desde la galería.
-- **Datos** en Supabase (tablas `travel_*` + bucket `travel-images`).
-- Paleta clara estilo Claude (beige `#faf9f5`, naranja `#d97757`).
+Mini app web, mobile-first y sin frameworks, para guardar los lugares que
+quieres visitar. Los datos y las imágenes subidas se conservan localmente en
+el navegador mediante `localStorage`.
 
 ## Desarrollo
 
 ```bash
-npm install
 npm run dev
 ```
 
-Variables opcionales (hay valores por defecto en `src/lib/supabase.ts`):
-ver `.env.example`.
+Después abre <http://localhost:3000>.
+
+## Despliegue en Vercel
+
+El repositorio está preparado como un sitio estático sin framework. Al
+importarlo en Vercel no hace falta cambiar ningún ajuste: `vercel.json`
+ejecuta `npm run build` y publica la carpeta `dist`.
+
+También puedes desplegarlo con la CLI:
+
+```bash
+vercel
+```
+
+No necesita variables de entorno. Ten en cuenta que cada dominio y navegador
+mantiene su propio `localStorage`; usa la exportación JSON antes de cambiar de
+dominio o dispositivo si quieres trasladar tus lugares.
 
 ## Estructura
 
-- `src/components/ui/map.tsx` — componentes de mapa estilo mapcn
-  (`Map`, `MapControls`, `MapMarker`, `MapPopup`) sobre maplibre-gl.
-- `src/components/` — vistas del mapa y referencias, formularios y hojas.
-- `src/lib/` — cliente de Supabase, tipos, geocodificación y parseo de enlaces.
+- `index.html`: estructura accesible, controles y formulario inferior.
+- `style.css`: interfaz responsive y paleta cálida.
+- `app.js`: CRUD, filtros, búsqueda, imágenes y persistencia.
+- `vercel.json`: configuración del build y publicación en Vercel.
+
+No requiere servicios externos. La exportación JSON permite hacer una copia
+de seguridad (incluidas las imágenes) y volver a importarla.
